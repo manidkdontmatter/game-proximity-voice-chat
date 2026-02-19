@@ -1,0 +1,18 @@
+{
+  "name": "@voice/proximity-voice-contracts",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node -e \"console.log('no tests for contracts')\""
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}

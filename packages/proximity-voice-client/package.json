@@ -1,0 +1,24 @@
+{
+  "name": "@voice/proximity-voice-client",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node -e \"console.log('no tests for client yet')\""
+  },
+  "dependencies": {
+    "@voice/proximity-voice-contracts": "file:../proximity-voice-contracts",
+    "livekit-client": "^2.15.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1"
+  }
+}
+
+

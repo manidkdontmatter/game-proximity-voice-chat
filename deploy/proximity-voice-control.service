@@ -1,0 +1,16 @@
+[Unit]
+Description=Proximity Voice Control Plane
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/game-proximity-voice-chat
+EnvironmentFile=/opt/game-proximity-voice-chat/packages/proximity-voice-control/.env
+ExecStart=/usr/bin/node /opt/game-proximity-voice-chat/packages/proximity-voice-control/dist/index.js
+Restart=on-failure
+RestartSec=2
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

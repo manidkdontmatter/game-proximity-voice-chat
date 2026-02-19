@@ -1,0 +1,31 @@
+{
+  "name": "@voice/proximity-voice-control",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^11.1.0",
+    "@voice/proximity-voice-contracts": "file:../proximity-voice-contracts",
+    "fastify": "^5.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "livekit-server-sdk": "^2.13.2",
+    "pino-pretty": "^13.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/node": "^22.13.1",
+    "tsx": "^4.19.2",
+    "vitest": "^3.0.5"
+  }
+}
+
+

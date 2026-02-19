@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+.env
+.env.*
+!.env.example
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+tools/livekit/
+test-env/runtime-pids.json

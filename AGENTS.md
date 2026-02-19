@@ -1,0 +1,1 @@
+Read all .md files in root

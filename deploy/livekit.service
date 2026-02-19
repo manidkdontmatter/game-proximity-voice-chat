@@ -1,0 +1,14 @@
+[Unit]
+Description=LiveKit Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/livekit-server --config /etc/livekit/livekit.yaml
+Restart=on-failure
+RestartSec=2
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
