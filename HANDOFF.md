@@ -82,7 +82,8 @@ Validation done:
 Local Windows testing does NOT require Nginx or coturn.
 
 Use:
-- `packages/proximity-voice-control/.env.windows-local.example`
+- `test-env/control.env` (recommended)
+- `LOCAL-TEST-RUNBOOK.md` (recommended)
 
 Expected local services:
 - control plane on `127.0.0.1:8080`
@@ -91,11 +92,11 @@ Expected local services:
 Run:
 1. `npm install`
 2. `npm run build`
-3. Copy `packages/proximity-voice-control/.env.windows-local.example` to `packages/proximity-voice-control/.env`
-4. Terminal A: `npm run dev`
-5. Terminal B:
-   - `npm run smoke`
-   - `npm run e2e:policy`
+3. `npm run testenv:start`
+4. `npm run testenv:check`
+5. Browser media validation:
+   - open two tabs at `http://127.0.0.1:8080/debug`
+   - run near/far transition test
 
 Notes:
 - `npm run smoke` checks session + pose flow quickly
@@ -131,6 +132,10 @@ Root scripts:
 - `npm run typecheck`
 - `npm run smoke`
 - `npm run e2e:policy`
+- `npm run testenv:start`
+- `npm run testenv:check`
+- `npm run testenv:livekit`
+- `npm run testenv:control`
 
 ## 8) Next-session priorities
 
@@ -144,6 +149,6 @@ Root scripts:
 1. `HANDOFF.md`
 2. `README.md`
 3. `API.md`
-4. `MVP.md`
-5. `MVP-CHECKLIST.md`
-
+4. `LOCAL-TEST-RUNBOOK.md`
+5. `MVP.md`
+6. `MVP-CHECKLIST.md`

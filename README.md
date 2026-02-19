@@ -1,67 +1,78 @@
 # Game Proximity Voice Chat
 
-Single-VPS MVP proximity voice stack for a multiplayer browser game.
+Standalone proximity voice stack for a multiplayer browser game.
 
-## Packages
+This repo contains:
+- A browser client package.
+- A Node control plane.
+- Contracts shared across both.
+- Local test tooling.
+- Production deployment configs.
+
+## What This Project Is
+- Voice transport is handled by LiveKit (SFU).
+- Proximity policy is computed in the control plane (`radius_compute`).
+- The control plane authoritatively decides who can hear who.
+- The client follows policy updates and applies local subscription/spatial behavior.
+
+High-level flow:
+1. Host app creates session via `POST /sessions`.
+2. Browser connects to LiveKit using returned token.
+3. Browser also connects to `policy-socket`.
+4. External authority posts poses via `POST /policy/poses`.
+5. Control plane recomputes audibility and pushes deltas/snapshots.
+6. LiveKit subscriptions are enforced server-side.
+
+## Repo Layout
 - `packages/proximity-voice-contracts`: shared zod schemas + TS types.
-- `packages/proximity-voice-control`: control plane API, policy socket, radius compute, LiveKit enforcement.
-- `packages/proximity-voice-client`: browser runtime package using LiveKit.
+- `packages/proximity-voice-control`: API + policy socket + policy compute + LiveKit enforcement.
+- `packages/proximity-voice-client`: browser runtime package.
+- `scripts`: smoke and policy e2e scripts.
+- `test-env`: local test environment (recommended daily path).
+- `deploy`: production config files (systemd, Nginx, LiveKit, coturn).
 
-## Quick Start
+## TL;DR: Daily Local Use
+If you forget everything, run this:
+
 1. `npm install`
-2. Copy `packages/proximity-voice-control/.env.example` to `.env` and set secrets/URLs.
-3. `npm run build`
-4. `npm run dev`
+2. `npm run testenv:start`
+3. `npm run testenv:check`
+4. Open two tabs at `http://127.0.0.1:8080/debug`
 
-## Windows Local Testing (No Nginx/TURN Required)
-This is for local development and policy validation on your home PC.
+Detailed steps and troubleshooting are in `LOCAL-TEST-RUNBOOK.md`.
 
-1. Copy `packages/proximity-voice-control/.env.windows-local.example` to `packages/proximity-voice-control/.env`.
-2. Start control plane: `npm run dev`
-3. In another shell, run:
-   - `npm run smoke`
-   - `npm run e2e:policy`
+## Command Reference
+- `npm run build`: build all packages.
+- `npm run test`: run workspace tests.
+- `npm run typecheck`: typecheck all packages.
+- `npm run smoke`: quick control-plane sanity check.
+- `npm run e2e:policy`: policy socket transition test.
+- `npm run testenv:start`: start LiveKit + control plane using local test env.
+- `npm run testenv:check`: run smoke + policy e2e with local test env vars loaded.
+- `npm run testenv:livekit`: start only local LiveKit (`--dev`).
+- `npm run testenv:control`: start only control plane with test env vars loaded.
 
-Notes:
-- Local tests do not require `coturn` or `nginx`.
-- For real media tests, run a local `livekit-server` binary on `127.0.0.1:7880`.
+## Local Test Environment (Recommended)
+Everything local-test-specific is centralized:
+- Config: `test-env/control.env`
+- Start scripts: `test-env/start-*.ps1`
+- Runbook: `LOCAL-TEST-RUNBOOK.md`
 
-## Easiest Local Test Setup (Recommended)
-All local test setup is centralized in `test-env/`.
+Local defaults:
+- Control plane: `http://127.0.0.1:8080`
+- LiveKit signaling: `ws://127.0.0.1:7880`
+- Control auth token: `change-me`
 
-1. Start everything (opens 2 terminals automatically):
-   - `npm run testenv:start`
-2. Validate control-plane checks:
-   - `npm run testenv:check`
-3. Open browser test page:
-   - `http://127.0.0.1:8080/debug`
+## No-Mic Browser Media Test
+Use `http://127.0.0.1:8080/debug` in two tabs.
 
-Manual options:
-- `npm run testenv:livekit`
-- `npm run testenv:control`
+Example setup:
+- Tab A: `roomId=room1`, `participantId=speaker-a`, `otherParticipantId=listener-b`, role `speaker`
+- Tab B: `roomId=room1`, `participantId=listener-b`, `otherParticipantId=speaker-a`, role `listener`
 
-## No-Mic Browser Media Test (Tone Generator)
-Use this to verify real hear/unhear behavior without a microphone.
-
-1. Start LiveKit locally (`127.0.0.1:7880`) and start control plane (`npm run dev`).
-2. Open two tabs at `http://127.0.0.1:8080/debug`.
-3. Use the same `roomId` in both tabs.
-4. Tab A:
-   - `participantId`: `speaker-a`
-   - `otherParticipantId`: `listener-b`
-   - `role`: `speaker`
-   - Click `Connect`
-5. Tab B:
-   - `participantId`: `listener-b`
-   - `otherParticipantId`: `speaker-a`
-   - `role`: `listener`
-   - Click `Connect`
-6. In either tab, click:
-   - `Post Near (10m)` -> listener should hear a tone.
-   - `Post Far (40m)` -> listener should stop hearing it.
-
-## Linux Production Deployment
-No Docker required. Use `deploy/DEPLOY.md` for a systemd + Nginx + LiveKit + coturn setup.
+Expected:
+- Click `Post Near (10m)` => listener hears tone.
+- Click `Post Far (40m)` => listener stops hearing tone.
 
 ## Runtime Constants (MVP)
 - Pose ingest: `4 Hz`
@@ -69,9 +80,14 @@ No Docker required. Use `deploy/DEPLOY.md` for a systemd + Nginx + LiveKit + cot
 - `R_enter=24m`
 - `R_exit=26m`
 - `maxSubscribedVoices=12`
-- Reconnect grace: `20s` (host app policy)
+- Reconnect grace: `20s`
 
-See `API.md` for endpoint/socket contracts.
+## Production
+Use `deploy/DEPLOY.md` for Linux single-VPS deployment with systemd + Nginx + LiveKit + coturn.
 
-Session memory/handoff for future work:
-- `HANDOFF.md`
+## Core Docs
+- `LOCAL-TEST-RUNBOOK.md`: quickest path to local testing, startup, shutdown, troubleshooting.
+- `API.md`: endpoint and websocket contracts.
+- `HANDOFF.md`: current status and implementation notes.
+- `MVP.md`: full product spec and constraints.
+- `MVP-CHECKLIST.md`: implementation checklist.
