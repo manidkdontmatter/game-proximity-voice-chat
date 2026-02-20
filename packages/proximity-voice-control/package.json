@@ -1,6 +1,7 @@
 {
-  "name": "@voice/proximity-voice-control",
-  "version": "0.1.0",
+  "name": "@manidkdontmatter/proximity-voice-control",
+  "version": "0.1.1",
+  "private": true,
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +14,7 @@
   },
   "dependencies": {
     "@fastify/websocket": "^11.1.0",
-    "@voice/proximity-voice-contracts": "file:../proximity-voice-contracts",
+    "@manidkdontmatter/proximity-voice-contracts": "^0.1.0",
     "fastify": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
     "livekit-server-sdk": "^2.13.2",
@@ -27,5 +28,3 @@
     "vitest": "^3.0.5"
   }
 }
-
-

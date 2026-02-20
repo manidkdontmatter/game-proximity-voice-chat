@@ -1,10 +1,10 @@
-# @voice/proximity-voice-client
+# @manidkdontmatter/proximity-voice-client
 
 Browser package for LiveKit proximity voice.
 
 ## Usage
 ```ts
-import { ProximityVoiceClient } from "@voice/proximity-voice-client";
+import { ProximityVoiceClient } from "@manidkdontmatter/proximity-voice-client";
 
 const voice = new ProximityVoiceClient();
 await voice.connect({ session, autoPublishMic: true });

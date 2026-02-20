@@ -1,4 +1,4 @@
-# @voice/proximity-voice-control
+# @manidkdontmatter/proximity-voice-control
 
 Control plane for proximity voice.
 

@@ -9,7 +9,7 @@ import {
   PoseBatchSchema,
   VoiceSessionRequestSchema,
   type PolicySocketOutbound,
-} from "@voice/proximity-voice-contracts";
+} from "@manidkdontmatter/proximity-voice-contracts";
 import { assertControlAuth, mintPolicySocketToken, verifyPolicySocketToken } from "./auth.js";
 import type { AppConfig } from "./config.js";
 import { renderDebugPage } from "./debug-page.js";

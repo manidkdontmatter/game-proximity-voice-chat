@@ -85,6 +85,22 @@ Expected:
 ## Production
 Use `deploy/DEPLOY.md` for Linux single-VPS deployment with systemd + Nginx + LiveKit + coturn.
 
+## GitHub Packages
+This repo is configured to publish reusable packages to GitHub Packages (not npmjs):
+- `@manidkdontmatter/proximity-voice-contracts`
+- `@manidkdontmatter/proximity-voice-client`
+
+How to publish:
+1. Bump versions in package manifests.
+2. Push to GitHub.
+3. Run the `publish-github-packages` workflow from Actions.
+
+How to install from another project:
+1. Add to that project's `.npmrc`:
+   - `@manidkdontmatter:registry=https://npm.pkg.github.com`
+2. Set `NODE_AUTH_TOKEN` to a GitHub token with package read access.
+3. Install packages with npm.
+
 ## Core Docs
 - `LOCAL-TEST-RUNBOOK.md`: quickest path to local testing, startup, shutdown, troubleshooting.
 - `API.md`: endpoint and websocket contracts.

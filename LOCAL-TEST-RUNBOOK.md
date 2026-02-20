@@ -87,7 +87,7 @@ Safe manual stop:
 1. Close terminals opened by `testenv:start`.
 2. Or stop by process in Task Manager:
    - `livekit-server.exe`
-   - Node process running `@voice/proximity-voice-control dev`
+   - Node process running `@manidkdontmatter/proximity-voice-control dev`
 
 ## Files Worth Remembering
 - `README.md`

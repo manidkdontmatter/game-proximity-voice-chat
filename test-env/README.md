@@ -10,7 +10,7 @@ powershell -ExecutionPolicy Bypass -File .\test-env\start-all.ps1
 
 This opens two terminals:
 - LiveKit (`--dev`)
-- Control plane (`npm run -w @voice/proximity-voice-control dev`)
+- Control plane (`npm run -w @manidkdontmatter/proximity-voice-control dev`)
 
 ## Validate API/Policy Tests
 

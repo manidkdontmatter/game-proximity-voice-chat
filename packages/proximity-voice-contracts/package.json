@@ -1,9 +1,16 @@
 {
-  "name": "@voice/proximity-voice-contracts",
-  "version": "0.1.0",
+  "name": "@manidkdontmatter/proximity-voice-contracts",
+  "version": "0.1.1",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manidkdontmatter/game-proximity-voice-chat.git"
+  },
   "files": [
     "dist"
   ],

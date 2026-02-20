@@ -1,9 +1,16 @@
 {
-  "name": "@voice/proximity-voice-client",
-  "version": "0.1.0",
+  "name": "@manidkdontmatter/proximity-voice-client",
+  "version": "0.1.1",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manidkdontmatter/game-proximity-voice-chat.git"
+  },
   "files": [
     "dist"
   ],
@@ -13,12 +20,10 @@
     "test": "node -e \"console.log('no tests for client yet')\""
   },
   "dependencies": {
-    "@voice/proximity-voice-contracts": "file:../proximity-voice-contracts",
+    "@manidkdontmatter/proximity-voice-contracts": "^0.1.0",
     "livekit-client": "^2.15.4"
   },
   "devDependencies": {
     "@types/node": "^22.13.1"
   }
 }
-
-

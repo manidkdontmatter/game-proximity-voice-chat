@@ -1,4 +1,4 @@
-import type { Pose } from "@voice/proximity-voice-contracts";
+import type { Pose } from "@manidkdontmatter/proximity-voice-contracts";
 import type { ParticipantState, RoomState, SessionRecord } from "./types.js";
 
 export class InMemoryStore {

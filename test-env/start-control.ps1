@@ -28,7 +28,7 @@ Write-Host "Starting control plane..." -ForegroundColor Cyan
 
 Push-Location $root
 try {
-  npm run -w @voice/proximity-voice-control dev
+  npm run -w @manidkdontmatter/proximity-voice-control dev
 } finally {
   Pop-Location
 }

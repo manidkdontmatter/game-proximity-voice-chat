@@ -6,8 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run -w @voice/proximity-voice-contracts build && npm run -w @voice/proximity-voice-control build && npm run -w @voice/proximity-voice-client build",
-    "dev": "npm run -w @voice/proximity-voice-control dev",
+    "build": "npm run -w @manidkdontmatter/proximity-voice-contracts build && npm run -w @manidkdontmatter/proximity-voice-control build && npm run -w @manidkdontmatter/proximity-voice-client build",
+    "dev": "npm run -w @manidkdontmatter/proximity-voice-control dev",
     "testenv:start": "powershell -ExecutionPolicy Bypass -File .\\test-env\\start-all.ps1",
     "testenv:livekit": "powershell -ExecutionPolicy Bypass -File .\\test-env\\start-livekit.ps1",
     "testenv:control": "powershell -ExecutionPolicy Bypass -File .\\test-env\\start-control.ps1",
@@ -15,7 +15,7 @@
     "smoke": "node scripts/smoke-control-plane.mjs",
     "e2e:policy": "node scripts/policy-socket-e2e.mjs",
     "test": "npm run -ws test",
-    "typecheck": "npm run -w @voice/proximity-voice-contracts typecheck && npm run -w @voice/proximity-voice-control typecheck && npm run -w @voice/proximity-voice-client typecheck"
+    "typecheck": "npm run -w @manidkdontmatter/proximity-voice-contracts typecheck && npm run -w @manidkdontmatter/proximity-voice-control typecheck && npm run -w @manidkdontmatter/proximity-voice-client typecheck"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

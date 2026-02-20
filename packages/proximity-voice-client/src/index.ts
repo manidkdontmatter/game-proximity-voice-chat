@@ -2,8 +2,8 @@ import type {
   PolicySocketOutbound,
   Vec3,
   VoiceSessionResponse,
-} from "@voice/proximity-voice-contracts";
-import { PolicySocketOutboundSchema } from "@voice/proximity-voice-contracts";
+} from "@manidkdontmatter/proximity-voice-contracts";
+import { PolicySocketOutboundSchema } from "@manidkdontmatter/proximity-voice-contracts";
 import { LocalAudioTrack, RemoteParticipant, Room, RoomEvent, Track, TrackPublication, createLocalAudioTrack } from "livekit-client";
 
 export interface ConnectOptions {
