@@ -23,6 +23,14 @@ High-level flow:
 5. Control plane recomputes audibility and pushes deltas/snapshots.
 6. LiveKit subscriptions are enforced server-side.
 
+## Start Here (Quick Decisions)
+- If your game is a separate project: install only the published packages:
+  - `@manidkdontmatter/proximity-voice-client`
+  - `@manidkdontmatter/proximity-voice-contracts`
+- Do not embed `proximity-voice-control` inside your game process.
+- Run `proximity-voice-control` as its own service on your VPS.
+- Your game server talks to control via HTTP (`/sessions`, `/policy/poses`).
+
 ## Repo Layout
 - `packages/proximity-voice-contracts`: shared zod schemas + TS types.
 - `packages/proximity-voice-control`: API + policy socket + policy compute + LiveKit enforcement.
@@ -90,16 +98,108 @@ This repo is configured to publish reusable packages to GitHub Packages (not npm
 - `@manidkdontmatter/proximity-voice-contracts`
 - `@manidkdontmatter/proximity-voice-client`
 
-How to publish:
-1. Bump versions in package manifests.
-2. Push to GitHub.
-3. Run the `publish-github-packages` workflow from Actions.
+Publishing is automated by `.github/workflows/publish-github-packages.yml`:
+- Trigger: pushing a tag that matches `v*` (example: `v0.1.2`)
+- Also supports manual run from Actions UI (`workflow_dispatch`)
+
+Release steps:
+1. Bump versions in:
+   - `packages/proximity-voice-contracts/package.json`
+   - `packages/proximity-voice-client/package.json`
+2. Commit + push to `main`.
+3. Create and push tag:
+   - `git tag -a vX.Y.Z -m "Release vX.Y.Z"`
+   - `git push origin vX.Y.Z`
 
 How to install from another project:
 1. Add to that project's `.npmrc`:
    - `@manidkdontmatter:registry=https://npm.pkg.github.com`
-2. Set `NODE_AUTH_TOKEN` to a GitHub token with package read access.
-3. Install packages with npm.
+   - `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`
+2. Set `NODE_AUTH_TOKEN` to a GitHub token with at least:
+   - `read:packages`
+   - `repo` (if repo/packages are private)
+3. Install:
+   - `npm i @manidkdontmatter/proximity-voice-client @manidkdontmatter/proximity-voice-contracts`
+
+## Host Game Integration (Minimal)
+Your game server should request sessions and send pose updates.
+
+Session request example:
+```ts
+const res = await fetch("https://your-voice-host/sessions", {
+  method: "POST",
+  headers: {
+    "content-type": "application/json",
+    "authorization": "Bearer YOUR_CONTROL_AUTH_TOKEN",
+  },
+  body: JSON.stringify({
+    participantId: playerId,
+    roomId: roomId,
+    displayName: playerName,
+  }),
+});
+
+const session = await res.json();
+```
+
+Client usage example:
+```ts
+import { ProximityVoiceClient } from "@manidkdontmatter/proximity-voice-client";
+
+const voice = new ProximityVoiceClient();
+await voice.connect({ session, autoPublishMic: true });
+
+voice.setListenerPose({ x: 0, y: 1.7, z: 0 });
+voice.upsertRemotePose("other-player-id", { x: 4, y: 1.7, z: -2 });
+```
+
+Pose feed example (from game server at ~4 Hz):
+```ts
+await fetch("https://your-voice-host/policy/poses", {
+  method: "POST",
+  headers: {
+    "content-type": "application/json",
+    "authorization": "Bearer YOUR_CONTROL_AUTH_TOKEN",
+  },
+  body: JSON.stringify({
+    roomId,
+    timestampMs: Date.now(),
+    poses: players.map((p) => ({
+      participantId: p.id,
+      position: { x: p.x, y: p.y, z: p.z },
+    })),
+  }),
+});
+```
+
+## VPS Deployment (Practical Order)
+Canonical details are in `deploy/DEPLOY.md`. Use this order:
+
+1. Build and configure app:
+   - `npm install`
+   - `npm run build`
+   - copy `packages/proximity-voice-control/.env.example` to `.env` and fill secrets/URLs
+2. Install and configure infra:
+   - LiveKit using `deploy/livekit.yaml`
+   - coturn using `deploy/coturn.conf`
+   - nginx using `deploy/nginx.conf`
+3. Install services:
+   - `deploy/proximity-voice-control.service`
+   - `deploy/livekit.service`
+4. Enable services:
+   - `sudo systemctl daemon-reload`
+   - `sudo systemctl enable --now proximity-voice-control`
+   - `sudo systemctl enable --now livekit`
+5. Verify:
+   - `curl -s http://127.0.0.1:8080/health`
+   - `curl -s http://127.0.0.1:8080/ready`
+
+## Operating Model (Do Not Forget)
+- Reusable library packages:
+  - `@manidkdontmatter/proximity-voice-client`
+  - `@manidkdontmatter/proximity-voice-contracts`
+- Non-library service package:
+  - `@manidkdontmatter/proximity-voice-control` (private, deploy as process)
 
 ## Core Docs
 - `LOCAL-TEST-RUNBOOK.md`: quickest path to local testing, startup, shutdown, troubleshooting.
